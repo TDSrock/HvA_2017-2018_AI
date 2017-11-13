@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Flock;
 
 /* 
  * the FlockingDead class
@@ -104,6 +105,8 @@ public class Agent
 	private static float sight = 75f;
 	private static float space = 30f;
 	private static float speed = 12f;
+    private static float cohesionPercentage = 0.05f;
+
 	private float boundary;
 	public float dX;
 	public float dY;
@@ -115,9 +118,11 @@ public class Agent
 		Position = new PointF(rnd.Next(boundary), rnd.Next(boundary));
 		this.boundary = boundary;
 		Zombie = zombie;
-	}
+        //ensure the cohesionPercentage remains between -1 and 1
+        cohesionPercentage = MathHelper.Clamp(cohesionPercentage, -1, 1);
+    }
 
-	public void Move(List<Agent> agents)
+    public void Move(List<Agent> agents)
 	{
         //Agents flock, zombie's hunt 
 		if (!Zombie) Flock(agents);
@@ -143,10 +148,10 @@ public class Agent
 				}
 				else if (distance < sight)
 				{
-					// Cohesion
-					//dX += TODO
-					//dY += TODO
-				}
+                    // Cohesion
+                    dX += (a.Position.X - Position.X) * cohesionPercentage;
+                    dY += (a.Position.Y - Position.Y) * cohesionPercentage;
+                }
 				if (distance < sight)
 				{
 					// Alignment
