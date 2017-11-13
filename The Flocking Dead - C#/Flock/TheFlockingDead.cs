@@ -156,10 +156,25 @@ public class Agent
 			}
 			if (a.Zombie && distance < sight)
 			{
-				// Evade
-				//dX += TODO
-				//dY += TODO
-			}
+                // Evade
+                if (Position.X > a.Position.X)
+                {
+                    dX++;
+                }
+                else if (Position.X < a.Position.X)
+                {
+                    dX--;
+                }
+
+                if (Position.Y > a.Position.Y)
+                {
+                    dY++;
+                }
+                else if (Position.Y < a.Position.Y)
+                {
+                    dY--;
+                }
+            }
 		}
 	}
 
@@ -181,9 +196,23 @@ public class Agent
 		}
 		if (prey != null)
 		{
-			// Move towards prey.
-			//dX += TODO
-			//dY += TODO
+            // Move towards prey.
+            if (Position.X > prey.Position.X)
+            {
+                dX--;
+            }else if(Position.X < prey.Position.X)
+            {
+                dX++;
+            }
+
+            if (Position.Y > prey.Position.Y)
+            {
+                dY--;
+            }
+            else if (Position.Y < prey.Position.Y)
+            {
+                dY++;
+            }
         }
 	}
 
