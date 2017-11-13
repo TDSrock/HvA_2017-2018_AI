@@ -1,0 +1,5 @@
+/Users/stefan/Projects/Flock/Flock/obj/x86/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/Users/stefan/Projects/Flock/Flock/bin/Debug/Flock.exe.mdb
+/Users/stefan/Projects/Flock/Flock/bin/Debug/Flock.exe
+/Users/stefan/Projects/Flock/Flock/obj/x86/Debug/Flock.exe
+/Users/stefan/Projects/Flock/Flock/obj/x86/Debug/Flock.exe.mdb
