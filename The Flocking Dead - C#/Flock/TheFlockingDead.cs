@@ -106,7 +106,7 @@ public class Agent
 	private static float space = 30f;
 	private static float speed = 12f;
     private static float cohesionPercentage = 0.05f;
-
+    private static float alignmentPercentage = 0.5f;
 	private float boundary;
 	public float dX;
 	public float dY;
@@ -120,6 +120,7 @@ public class Agent
 		Zombie = zombie;
         //ensure the cohesionPercentage remains between -1 and 1
         cohesionPercentage = MathHelper.Clamp(cohesionPercentage, -1, 1);
+        alignmentPercentage = MathHelper.Clamp(alignmentPercentage, -1, 1);
     }
 
     public void Move(List<Agent> agents)
@@ -154,10 +155,10 @@ public class Agent
                 }
 				if (distance < sight)
 				{
-					// Alignment
-					//dX += TODO
-					//dY += TODO
-				}
+                    // Alignment
+                    dX += a.dX * alignmentPercentage;
+                    dY += a.dY * alignmentPercentage;
+                }
 			}
 			if (a.Zombie && distance < sight)
 			{
