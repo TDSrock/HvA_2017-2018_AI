@@ -181,9 +181,23 @@ public class Agent
 		}
 		if (prey != null)
 		{
-			// Move towards prey.
-			//dX += TODO
-			//dY += TODO
+            // Move towards prey.
+            if (Position.X > prey.Position.X)
+            {
+                dX--;
+            }else if(Position.X < prey.Position.X)
+            {
+                dX++;
+            }
+
+            if (Position.Y > prey.Position.Y)
+            {
+                dY--;
+            }
+            else if (Position.Y < prey.Position.Y)
+            {
+                dY++;
+            }
         }
 	}
 
