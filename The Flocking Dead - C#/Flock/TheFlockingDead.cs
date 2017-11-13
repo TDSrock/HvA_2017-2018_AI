@@ -14,6 +14,8 @@ public class TheFlockingDead : Form
 	private Swarm swarm;
 	private Image iconRegular;
 	private Image iconZombie;
+    private bool scaryMouse = false;
+    private Agent scaryMouseAgent;
 
 	[STAThread]
 	private static void Main()
@@ -96,6 +98,11 @@ public class Swarm
 			a.Move(Agents);
 		}
 	}
+
+    public void SpawnNewAgent(bool zombie, int boundary)
+    {
+        Agents.Add(new Agent(zombie, boundary));
+    }
 }
 
 public class Agent
@@ -118,8 +125,7 @@ public class Agent
 		Position = new PointF(rnd.Next(boundary), rnd.Next(boundary));
 		this.boundary = boundary;
 		Zombie = zombie;
-        //ensure the cohesionPercentage remains between -1 and 1
-        cohesionPercentage = MathHelper.Clamp(cohesionPercentage, -1, 1);
+        //ensure the alignmentPercentage remains between -1 and 1
         alignmentPercentage = MathHelper.Clamp(alignmentPercentage, -1, 1);
     }
 
@@ -163,23 +169,8 @@ public class Agent
 			if (a.Zombie && distance < sight)
 			{
                 // Evade
-                if (Position.X > a.Position.X)
-                {
-                    dX++;
-                }
-                else if (Position.X < a.Position.X)
-                {
-                    dX--;
-                }
-
-                if (Position.Y > a.Position.Y)
-                {
-                    dY++;
-                }
-                else if (Position.Y < a.Position.Y)
-                {
-                    dY--;
-                }
+                dX += Position.X - a.Position.X;
+                dY += Position.Y - a.Position.Y;
             }
 		}
 	}
@@ -203,22 +194,8 @@ public class Agent
 		if (prey != null)
 		{
             // Move towards prey.
-            if (Position.X > prey.Position.X)
-            {
-                dX--;
-            }else if(Position.X < prey.Position.X)
-            {
-                dX++;
-            }
-
-            if (Position.Y > prey.Position.Y)
-            {
-                dY--;
-            }
-            else if (Position.Y < prey.Position.Y)
-            {
-                dY++;
-            }
+            dX += prey.Position.X - Position.X;
+            dY += prey.Position.Y - Position.Y;
         }
 	}
 
