@@ -114,6 +114,7 @@ public class Agent
 	private static float speed = 12f;
     private static float cohesionPercentage = 0.05f;
     private static float alignmentPercentage = 0.5f;
+    private static float seperationScalar = 2f;//Keep in mind that this also uses the space variable to trigger
 	private float boundary;
 	public float dX;
 	public float dY;
@@ -150,8 +151,8 @@ public class Agent
 				if (distance < space)
 				{
 					// Separation
-					dX += Position.X - a.Position.X;
-					dY += Position.Y - a.Position.Y;
+					dX += (Position.X - a.Position.X) * seperationScalar;
+					dY += (Position.Y - a.Position.Y) * seperationScalar;
 				}
 				else if (distance < sight)
 				{
