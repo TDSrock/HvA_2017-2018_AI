@@ -16,6 +16,12 @@ public class TheFlockingDead : Form
 	private Image iconZombie;
     private bool scaryMouse = false;
     private Agent scaryMouseAgent;
+    CheckBox scaryMouseToggleButton;
+    Button addZombieButton;
+    Button removeZombieButton;
+    Button addHumanButton;
+    Button removeHumanButton;
+    private int boundary;
 
 	[STAThread]
 	private static void Main()
@@ -26,7 +32,53 @@ public class TheFlockingDead : Form
     //Sets the initial parameters
 	public TheFlockingDead()
 	{
-		int boundary = 640;
+        scaryMouseToggleButton = new CheckBox()
+        {
+            Location = new Point(10, 10),
+            Size = new Size(100, 20),
+            Text = "Scary mouse"
+        };
+        scaryMouseToggleButton.Click += new EventHandler(this.ButtonClick);
+
+        addZombieButton = new Button()
+        {
+            Location = new Point(100, 10),
+            Size = new Size(100, 20),
+            Text = "Add zombie"
+        };
+        addZombieButton.Click += new EventHandler(this.ButtonClick);
+
+        removeZombieButton = new Button()
+        {
+            Location = new Point(220, 10),
+            Size = new Size(100, 20),
+            Text = "Remove zombie",
+        };
+        removeZombieButton.Click += new EventHandler(this.ButtonClick);
+
+        addHumanButton = new Button()
+        {
+            Location = new Point(340, 10),
+            Size = new Size(100, 20),
+            Text = "Add human"
+        };
+        addHumanButton.Click += new EventHandler(this.ButtonClick);
+
+        removeHumanButton = new Button()
+        {
+            Location = new Point(460, 10),
+            Size = new Size(100, 20),
+            Text = "Remove human"
+        };
+        removeHumanButton.Click += new EventHandler(this.ButtonClick);
+
+
+        Controls.Add(scaryMouseToggleButton);
+        Controls.Add(addZombieButton);
+        Controls.Add(removeZombieButton);
+        Controls.Add(addHumanButton);
+        Controls.Add(removeHumanButton);
+		this.boundary = 640;
 		SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, true);
 		FormBorderStyle = FormBorderStyle.FixedToolWindow;
 		StartPosition = FormStartPosition.CenterScreen;
@@ -72,8 +124,54 @@ public class TheFlockingDead : Form
 	private void timer_Tick(object sender, EventArgs e)
 	{
 		swarm.MoveAgents();
+        if(this.scaryMouse && this.scaryMouseAgent != null)
+        {
+            this.scaryMouseAgent.Position = this.PointToClient(Cursor.Position);
+            Console.WriteLine(scaryMouseAgent.Position.X + " " + scaryMouseAgent.Position.Y);
+        }
 		Invalidate();
 	}
+
+    private void ButtonClick(object sender, EventArgs e)
+    {
+        ButtonBase triggeredButton = (ButtonBase)sender;
+        switch (triggeredButton.Text)
+        {
+            case "Scary mouse":
+                this.scaryMouse = !this.scaryMouse;
+                if (this.scaryMouse)
+                {
+                    //if we just toggled too true
+                    this.scaryMouseAgent = new Agent(true, 0)
+                    {
+                        Position = this.PointToClient(Cursor.Position),
+                        special = true
+                    };
+                    this.swarm.Agents.Add(scaryMouseAgent);
+                }
+                else
+                {
+                    this.swarm.Agents.Remove(scaryMouseAgent);
+                    this.scaryMouseAgent = null;
+                }
+                break;
+            case "Add zombie":
+                this.swarm.SpawnNewAgent(true, this.boundary);
+                break;
+            case "Add human":
+                this.swarm.SpawnNewAgent(false, this.boundary);
+                break;
+            case "Remove zombie":
+                this.swarm.RemoveAgent(true);
+                break;
+            case "Remove human":
+                this.swarm.RemoveAgent(false);
+                break;
+            default:
+                Console.WriteLine(triggeredButton.Text + " has not yet been supported");
+                break;
+        }
+    }
 }
 
 /*
@@ -103,6 +201,23 @@ public class Swarm
     {
         Agents.Add(new Agent(zombie, boundary));
     }
+
+    public void RemoveAgent(bool zombie)
+    {
+        Agent agentToRemove = null;
+        foreach(Agent a in Agents)
+        {
+            if(a.Zombie == zombie && !a.special)
+            {
+                agentToRemove = a;
+                break;
+            }
+        }
+        if(agentToRemove != null)
+        {
+            Agents.Remove(agentToRemove);
+        }
+    }
 }
 
 public class Agent
@@ -120,6 +235,7 @@ public class Agent
 	public float dY;
 	public bool Zombie;
 	public PointF Position;
+    public bool special = false;
 
 	public Agent(bool zombie, int boundary)
 	{
