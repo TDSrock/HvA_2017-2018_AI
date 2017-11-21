@@ -88,7 +88,7 @@ public class TheFlockingDead : Form
 		swarm = new Swarm(boundary);
 		timer = new Timer();
 		timer.Tick += new EventHandler(this.timer_Tick);
-		timer.Interval = 75;
+		timer.Interval = 1000/60;
 		timer.Start();
 	}
 
@@ -127,7 +127,7 @@ public class TheFlockingDead : Form
         if(this.scaryMouse && this.scaryMouseAgent != null)
         {
             this.scaryMouseAgent.Position = this.PointToClient(Cursor.Position);
-            Console.WriteLine(scaryMouseAgent.Position.X + " " + scaryMouseAgent.Position.Y);
+            //Console.WriteLine(scaryMouseAgent.Position.X + " " + scaryMouseAgent.Position.Y);
         }
 		Invalidate();
 	}
@@ -227,10 +227,12 @@ public class Agent
 	private static float sight = 75f;
 	private static float space = 30f;
 	private static float speed = 12f;
-    private static float cohesionPercentage = 0.05f;
+    private static float cohesionScalar = 0.05f;
     private static float alignmentPercentage = 0.5f;
-    private static float seperationScalar = 2f;//Keep in mind that this also uses the space variable to trigger
-	private float boundary;
+    private static float seperationScalar = 1f;//Keep in mind that this also uses the space variable to trigger
+    private static float evasionScalar = 1.2f;
+    private static float huntScalar = 5f;
+    private float boundary;
 	public float dX;
 	public float dY;
 	public bool Zombie;
@@ -273,11 +275,11 @@ public class Agent
 				else if (distance < sight)
 				{
                     // Cohesion
-                    dX += (a.Position.X - Position.X) * cohesionPercentage;
-                    dY += (a.Position.Y - Position.Y) * cohesionPercentage;
+                    dX += (a.Position.X - Position.X) * cohesionScalar;
+                    dY += (a.Position.Y - Position.Y) * cohesionScalar;
                 }
 				if (distance < sight)
-				{
+                {
                     // Alignment
                     dX += a.dX * alignmentPercentage;
                     dY += a.dY * alignmentPercentage;
@@ -286,8 +288,8 @@ public class Agent
 			if (a.Zombie && distance < sight)
 			{
                 // Evade
-                dX += Position.X - a.Position.X;
-                dY += Position.Y - a.Position.Y;
+                dX += (Position.X - a.Position.X) * evasionScalar;
+                dY += (Position.Y - a.Position.Y) * evasionScalar;
             }
 		}
 	}
@@ -311,8 +313,8 @@ public class Agent
 		if (prey != null)
 		{
             // Move towards prey.
-            dX += prey.Position.X - Position.X;
-            dY += prey.Position.Y - Position.Y;
+            dX += (prey.Position.X - Position.X) * huntScalar;
+            dY += (prey.Position.Y - Position.Y) * huntScalar;
         }
 	}
 
