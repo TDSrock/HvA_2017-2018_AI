@@ -127,7 +127,6 @@ public class TheFlockingDead : Form
         if(this.scaryMouse && this.scaryMouseAgent != null)
         {
             this.scaryMouseAgent.Position = this.PointToClient(Cursor.Position);
-            //Console.WriteLine(scaryMouseAgent.Position.X + " " + scaryMouseAgent.Position.Y);
         }
 		Invalidate();
 	}
