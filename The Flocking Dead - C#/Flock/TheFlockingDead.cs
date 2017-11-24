@@ -226,8 +226,8 @@ public class Agent
 	private static float sight = 75f;
 	private static float space = 30f;
 	private static float speed = 12f;
-    private static float cohesionScalar = 0.2f;
-    private static float alignmentPercentage = 0.5f;
+    private static float cohesionScalar = 0.01f;
+    private static float alignmentPercentage = -0.5f;
     private static float seperationScalar = 0.1f;//Keep in mind that this also uses the space variable to trigger
     private static float evasionScalar = 1.2f;
     private static float huntScalar = 5f;
