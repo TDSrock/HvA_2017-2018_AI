@@ -16,3 +16,4 @@ The Flocking Dead - C#/Flock/bin/Debug/Flock.vshost.exe.manifest
 The Flocking Dead - C#/Flock/obj/x86/Debug/TheFlockingDead.csproj.FileListAbsolute.txt
 The Flocking Dead - C#/Flock/bin/Debug/Flock.exe
 *.exe
+*.cache
