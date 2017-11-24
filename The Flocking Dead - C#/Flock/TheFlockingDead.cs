@@ -184,7 +184,7 @@ public class Swarm
 	{
 		for (int i = 0; i < 15; i++)
 		{
-			Agents.Add(new Agent((i > 12), boundary));
+			Agents.Add(new Agent((i > 0), boundary));
 		}
 	}
 
@@ -229,7 +229,7 @@ public class Agent
     private static float cohesionScalar = 0.01f;
     private static float alignmentPercentage = -0.5f;
     private static float seperationScalar = 0.1f;//Keep in mind that this also uses the space variable to trigger
-    private static float evasionScalar = 1.2f;
+    private static float evasionScalar = 0.04f;
     private static float huntScalar = 5f;
     private float boundary;
 	public float dX;
@@ -336,7 +336,7 @@ public class Agent
 	{
 		float s;
 		if (!Zombie) s = speed;
-		else s = speed / 4f; //Zombie's are slower
+		else s = speed / 8f; //Zombie's are slower
 		float val = Distance(new PointF(0f, 0f), new PointF(dX, dY));
 		if (val > s)
 		{
