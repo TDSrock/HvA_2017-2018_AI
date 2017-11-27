@@ -12,8 +12,6 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
-**/Debug/
-**/bin/
 *.exe
 *.cache
-
+*.vshost.*
