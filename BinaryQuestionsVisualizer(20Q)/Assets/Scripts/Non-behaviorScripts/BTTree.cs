@@ -11,7 +11,7 @@ namespace BinaryQuestions
     [Serializable] class BTTree
     {
         BTNode rootNode;
-
+        public TwentyQuestionsGameHost parent;
         public BTTree(string question, string yesGuess, string noGuess)
         {
             rootNode = new BTNode(question);

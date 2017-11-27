@@ -53,7 +53,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Non-behaviorScripts\BTNode.cs" />
      <Compile Include="Assets\Scripts\Non-behaviorScripts\BTTree.cs" />
-     <Compile Include="Assets\Scripts\Non-behaviorScripts\Program.cs" />
+     <Compile Include="Assets\Scripts\Non-behaviorScripts\TwentyQuestionsGameHost.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
