@@ -14,3 +14,6 @@ ExportedObj/
 *.pdb
 The Flocking Dead - C#/Flock/bin/Debug/Flock.vshost.exe.manifest
 The Flocking Dead - C#/Flock/obj/x86/Debug/TheFlockingDead.csproj.FileListAbsolute.txt
+BinaryQuestions Csharp/BinaryQuestions/bin/Debug/serialized.bin
+BinaryQuestions Csharp/BinaryQuestions/bin/
+BinaryQuestions Csharp/BinaryQuestions/obj/x86/Debug/
