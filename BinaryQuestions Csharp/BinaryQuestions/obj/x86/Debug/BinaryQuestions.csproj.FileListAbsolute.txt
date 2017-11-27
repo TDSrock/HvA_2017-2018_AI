@@ -5,3 +5,6 @@ C:\Users\Stefan\Desktop\PracticumBinaryTree\BinaryQuestions\BinaryQuestions\obj\
 C:\Users\Stefan\Desktop\PracticumBinaryTree\BinaryQuestions\BinaryQuestions\obj\x86\Debug\BinaryQuestions.pdb
 C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\BinaryQuestions Csharp\BinaryQuestions\obj\x86\Debug\BinaryQuestions.exe
 C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\BinaryQuestions Csharp\BinaryQuestions\obj\x86\Debug\BinaryQuestions.pdb
+C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\BinaryQuestions Csharp\BinaryQuestions\bin\Debug\BinaryQuestions.exe
+C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\BinaryQuestions Csharp\BinaryQuestions\bin\Debug\BinaryQuestions.pdb
+C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\BinaryQuestions Csharp\BinaryQuestions\obj\x86\Debug\BinaryQuestions.csprojResolveAssemblyReference.cache
