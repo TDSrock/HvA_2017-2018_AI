@@ -88,7 +88,7 @@ public class TheFlockingDead : Form
 		swarm = new Swarm(boundary);
 		timer = new Timer();
 		timer.Tick += new EventHandler(this.timer_Tick);
-		timer.Interval = 1000/60;
+		timer.Interval = 2000/60;
 		timer.Start();
 	}
 
@@ -124,6 +124,7 @@ public class TheFlockingDead : Form
 	private void timer_Tick(object sender, EventArgs e)
 	{
 		swarm.MoveAgents();
+        swarm.KillAgent();
         if(this.scaryMouse && this.scaryMouseAgent != null)
         {
             this.scaryMouseAgent.Position = this.PointToClient(Cursor.Position);
@@ -179,6 +180,7 @@ public class TheFlockingDead : Form
 public class Swarm
 {
 	public List<Agent> Agents = new List<Agent>();
+    private Agent removeThisAgent;
 
 	public Swarm(int boundary)
 	{
@@ -193,9 +195,24 @@ public class Swarm
 		foreach (Agent a in Agents)
 		{
 			a.Move(Agents);
+            if(a.killPrey != null)
+            {
+                removeThisAgent = a.killPrey;
+            }
 		}
 	}
 
+    public void KillAgent()
+    {
+        if(removeThisAgent != null)
+        {
+            if (Agents.Contains(removeThisAgent))
+            {
+                Agents.Remove(removeThisAgent);
+            }
+        }
+    }
+    
     public void SpawnNewAgent(bool zombie, int boundary)
     {
         Agents.Add(new Agent(zombie, boundary));
@@ -217,6 +234,7 @@ public class Swarm
             Agents.Remove(agentToRemove);
         }
     }
+
 }
 
 public class Agent
@@ -226,17 +244,19 @@ public class Agent
 	private static float sight = 75f;
 	private static float space = 30f;
 	private static float speed = 12f;
-    private static float cohesionScalar = 0.05f;
-    private static float alignmentPercentage = 0.5f;
-    private static float seperationScalar = 1f;//Keep in mind that this also uses the space variable to trigger
-    private static float evasionScalar = 1.2f;
+    private static float cohesionScalar = 0.01f;
+    private static float alignmentPercentage = -0.5f;
+    private static float seperationScalar = 0.1f;//Keep in mind that this also uses the space variable to trigger
+    private static float evasionScalar = 0.04f;
     private static float huntScalar = 5f;
+    private static float killRange = 5f;
     private float boundary;
 	public float dX;
 	public float dY;
 	public bool Zombie;
 	public PointF Position;
     public bool special = false;
+    public Agent killPrey;
 
 	public Agent(bool zombie, int boundary)
 	{
@@ -249,8 +269,9 @@ public class Agent
 
     public void Move(List<Agent> agents)
 	{
+        killPrey = null;
         //Agents flock, zombie's hunt 
-		if (!Zombie) Flock(agents);
+		if (Zombie) Flock(agents);
 		else Hunt(agents);
 		CheckBounds();
 		CheckSpeed();
@@ -263,7 +284,7 @@ public class Agent
 		foreach (Agent a in agents)
 		{
 			float distance = Distance(Position, a.Position);
-			if (a != this && !a.Zombie)
+			if (a != this && a.Zombie)
 			{
 				if (distance < space)
 				{
@@ -284,7 +305,7 @@ public class Agent
                     dY += a.dY * alignmentPercentage;
                 }
 			}
-			if (a.Zombie && distance < sight)
+			if (!a.Zombie && distance < sight)
 			{
                 // Evade
                 dX += (Position.X - a.Position.X) * evasionScalar;
@@ -299,7 +320,7 @@ public class Agent
 		Agent prey = null;
 		foreach (Agent a in agents)
 		{
-			if (!a.Zombie)
+			if (a.Zombie)
 			{
 				float distance = Distance(Position, a.Position);
 				if (distance < sight && distance < range)
@@ -314,7 +335,13 @@ public class Agent
             // Move towards prey.
             dX += (prey.Position.X - Position.X) * huntScalar;
             dY += (prey.Position.Y - Position.Y) * huntScalar;
+
+            if (Distance(Position, prey.Position) < killRange)
+            {
+                killPrey = prey;
+            }
         }
+        
 	}
 
 	private static float Distance(PointF p1, PointF p2)
