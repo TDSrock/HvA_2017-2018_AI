@@ -5,47 +5,55 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
 
-namespace BinaryQuestions
+[Serializable]
+public class BTTree : MonoBehaviour
 {
-    [Serializable] class BTTree
+    bool constructorUsed = false;
+    [SerializeField]BTNode rootNode;
+    public TwentyQuestion parent;
+    public BTTree(string question, string yesGuess, string noGuess)
     {
-        BTNode rootNode;
-        public TwentyQuestionsGameHost parent;
-        public BTTree(string question, string yesGuess, string noGuess)
-        {
-            rootNode = new BTNode(question);
-            rootNode.setYesNode(new BTNode(yesGuess));
-            rootNode.setNoNode(new BTNode(noGuess));
+        rootNode = new BTNode(question);
+        rootNode.setYesNode(new BTNode(yesGuess));
+        rootNode.setNoNode(new BTNode(noGuess));
+        this.constructorUsed = true;
+        //Serialize the object on creation
+        this.saveQuestionTree();
+    }
 
-            //Serialize the object on creation
-            this.saveQuestionTree();
-        }
+    public BTTree()
+    {
 
-        public BTTree()
-        {
+    }
+
+    public void Start()
+    {
+
             IFormatter formatter = new BinaryFormatter();
-            using (FileStream stream = File.OpenRead("serialized.bin"))
+            using(FileStream stream = File.OpenRead(Application.persistentDataPath + "/serialized.bin"))
             {
-                rootNode = (BTNode)formatter.Deserialize(stream);
+                //rootNode = (BTNode)formatter.Deserialize(stream);
             }
-        }
 
-        public void query()
+    }
+
+    public void query()
+    {
+        rootNode.query(1);
+
+        //We're at the end of the game now, so we'll save the tree in case the user added new data
+        //this.saveQuestionTree();
+    }
+
+    public void saveQuestionTree()
+    {
+        IFormatter formatter = new BinaryFormatter();
+        using(FileStream stream = File.Create(Application.persistentDataPath + "/serialized.bin"))
         {
-            rootNode.query(1);
-
-            //We're at the end of the game now, so we'll save the tree in case the user added new data
-            this.saveQuestionTree();
-        }
-
-        public void saveQuestionTree()
-        {
-            IFormatter formatter = new BinaryFormatter();
-            using (FileStream stream = File.Create("serialized.bin"))
-            {
-                formatter.Serialize(stream, rootNode);
-            }
+            formatter.Serialize(stream, rootNode);
         }
     }
+
 }
