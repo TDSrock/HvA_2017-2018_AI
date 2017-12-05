@@ -11,9 +11,72 @@ using UnityEngine.UI;
 
 public class TwentyQuestion : MonoBehaviour
 {
-    public enum State { setupNewGameState, readyToStart, playing }
+    #region Singleton
+
+    public static TwentyQuestion instance;
+
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("More than one instance of Inventory found!");
+            return;
+        }
+
+        instance = this;
+    }
+
+    #endregion
+
+    public enum State { setupNewGameState, readyToStart, playing, addingNewQuestion, addingNewQuestionAnswer, addingNewQuestionObject, guessing }
 
     public State state = State.readyToStart;
+
+    public State _state
+    {
+        get { return this.state; }
+        set {
+            this.state = value;
+            switch (value)
+            {
+                case State.setupNewGameState:
+                    this.inputFieldSection.SetActive(true);
+                    this.buttonsSection.SetActive(false);
+                    break;
+                case State.readyToStart:
+                    this.inputFieldSection.SetActive(false);
+                    this.buttonsSection.SetActive(true);
+                    break;
+                case State.playing:
+                    this.inputFieldSection.SetActive(false);
+                    this.buttonsSection.SetActive(true);
+                    break;
+                case State.addingNewQuestion:
+                    this.inputFieldSection.SetActive(true);
+                    this.buttonsSection.SetActive(false);
+                    this.questionCountText.text = "Looks like you won, could you help me get smarter?";
+                    break;
+                case State.guessing:
+                    this.inputFieldSection.SetActive(false);
+                    this.buttonsSection.SetActive(true);
+                    this.questionCountText.text = "Hmmm I sense you are thinking about:";
+                    break;
+                case State.addingNewQuestionAnswer:
+                    this.inputFieldSection.SetActive(false);
+                    this.buttonsSection.SetActive(true);
+                    this.questionCountText.text = "";
+                    break;
+                case State.addingNewQuestionObject:
+                    this.inputFieldSection.SetActive(true);
+                    this.buttonsSection.SetActive(false);
+                    break;
+                default:
+                    Debug.LogWarning("Problems have arised");
+                    break;
+            }
+        }
+    }
+
     static BTTree tree;
     [SerializeField]private string output;
     [SerializeField]
@@ -24,6 +87,11 @@ public class TwentyQuestion : MonoBehaviour
     private GameObject inputFieldSection;
     public Text outputText;
     public Text questionCountText;
+    int questionsAsked;
+    string userQuestion;
+    string userObject;
+
+    public BTNode currentActiveNode;
 
     public string inputText;
 
@@ -53,10 +121,20 @@ public class TwentyQuestion : MonoBehaviour
             tree = this.gameObject.AddComponent<BTTree>();
             tree.parent = this;
             this._output = "Tree loaded";
+            this._state = State.readyToStart;
         }
         else
             startNewGame();
 
+    }
+
+    private void FixedUpdate()
+    {
+        switch (_state)
+        {
+            case State.playing:
+                break;
+        }
     }
 
     static bool playAgain()
@@ -92,17 +170,57 @@ public class TwentyQuestion : MonoBehaviour
 
     public void yesButtonPressed()
     {
+        switch (_state)
+        {
+            case State.readyToStart:
+                _state = State.playing;
+                currentActiveNode = tree.rootNode;
+                this.questionsAsked = 0;
+                break;
+            case State.playing:
+                ChangeActiveNode(this.currentActiveNode.getYesNode());
+                break;
+            case State.guessing:
+                _output = "Haha! I win!!!";
+                _state = State.readyToStart;
+                break;
 
+        }
     }
 
     public void noButtonPressed()
     {
+        switch (_state)
+        {
+            case State.readyToStart:
+                _state = State.playing;
+                currentActiveNode = tree.rootNode;
+                questionsAsked = 1;
+                this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
+                this._output = currentActiveNode.query(questionsAsked);
+                break;
+            case State.playing:
+                ChangeActiveNode(this.currentActiveNode.getNoNode());
+                break;
+            case State.guessing:
+                _state = State.addingNewQuestion;
+                    break;
 
+        }
     }
 
     public void confirmTextButtonPressed()
     {
         this._inputText = inputField.text;
+    }
+
+
+    public void ChangeActiveNode(BTNode nodeToChangeToo)
+    {
+        this.currentActiveNode = nodeToChangeToo;
+        this.questionsAsked++;
+        this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
+        this._output = currentActiveNode.query(questionsAsked);
     }
 
 }

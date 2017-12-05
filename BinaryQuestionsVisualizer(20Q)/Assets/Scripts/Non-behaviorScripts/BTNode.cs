@@ -11,45 +11,46 @@ public class BTNode
     BTNode noNode;
     BTNode yesNode;
     BTTree parent;
-
+    public int traversedTimes;
+    public int winsOnThisNode;
+    [NonSerialized] public VisualNode visualNode;//ref too the visual node script
 
     /**
      * Constructor for the nodes: This class holds an String representing 
      * an object if the noNode and yesNode are null and a question if the
      * yesNode and noNode point to a BTNode.
      */
-    public BTNode(string nodeMessage)
+    public BTNode(string nodeMessage, int traversedTimes, int winsOnThisNode)
     {
         message = nodeMessage;
         noNode = null;
         yesNode = null;
+        this.traversedTimes = traversedTimes;
+        this.winsOnThisNode = winsOnThisNode;
     }
 
-    public void query(int q)
+    public string query(int q)
     {
-        if(q > 20)
+        traversedTimes++;
+        if (q > 20)
         {
-            Console.WriteLine("That was the last question. You win!");
+            return "That was the last question. You win!";
         }
-        else if(this.isQuestion())
+        else if (this.isQuestion())
         {
-            Console.WriteLine(q + ") " + this.message);
-            Console.Write("Enter 'y' for yes and 'n' for no: ");
-            char input = getYesOrNo(); //y or n
-            if(input == 'y')
-                yesNode.query(q + 1);
-            else
-                noNode.query(q + 1);
+            return this.message;
         }
         else
-            this.onQueryObject(q);
+        {
+            return this.onQueryObject();
+        }
     }
 
-    public void onQueryObject(int q)
+    public string onQueryObject()
     {
-        Console.WriteLine(q + ") Are you thinking of a(n) " + this.message + "? ");
-        Console.Write("Enter 'y' for yes and 'n' for no: ");
-        char input = getYesOrNo(); //y or n
+        TwentyQuestion.instance._state = TwentyQuestion.State.guessing;
+        return "Are you thinking of a(n) " + this.message + "?";
+        var input = ' ';
         if(input == 'y')
             Console.Write("I Win!\n");
         else
@@ -68,13 +69,13 @@ public class BTNode
         char input = getYesOrNo(); //y or n
         if(input == 'y')
         {
-            this.noNode = new BTNode(this.message);
-            this.yesNode = new BTNode(userObject);
+            this.noNode = new BTNode(this.message, this.traversedTimes, this.winsOnThisNode);
+            this.yesNode = new BTNode(userObject, 0 , 0);
         }
         else
         {
-            this.yesNode = new BTNode(this.message);
-            this.noNode = new BTNode(userObject);
+            this.noNode = new BTNode(this.message, this.traversedTimes, this.winsOnThisNode);
+            this.yesNode = new BTNode(userObject, 0, 0);
         }
         Console.Write("Thank you! My knowledge has been increased");
         this.setMessage(userQuestion);

@@ -11,13 +11,13 @@ using UnityEngine;
 public class BTTree : MonoBehaviour
 {
     bool constructorUsed = false;
-    [SerializeField]BTNode rootNode;
+    [SerializeField]public BTNode rootNode;
     public TwentyQuestion parent;
     public BTTree(string question, string yesGuess, string noGuess)
     {
-        rootNode = new BTNode(question);
-        rootNode.setYesNode(new BTNode(yesGuess));
-        rootNode.setNoNode(new BTNode(noGuess));
+        rootNode = new BTNode(question, 0, 0);
+        rootNode.setYesNode(new BTNode(yesGuess, 0, 0));
+        rootNode.setNoNode(new BTNode(noGuess, 0, 0));
         this.constructorUsed = true;
         //Serialize the object on creation
         this.saveQuestionTree();
@@ -30,7 +30,6 @@ public class BTTree : MonoBehaviour
 
     public void Start()
     {
-
             IFormatter formatter = new BinaryFormatter();
             using(FileStream stream = File.OpenRead(Application.persistentDataPath + "/serialized.bin"))
             {

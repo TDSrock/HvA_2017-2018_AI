@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
 
 public class VisualNode : MonoBehaviour {
 
@@ -23,10 +24,52 @@ public class VisualNode : MonoBehaviour {
     [SerializeField] private AnimationCurve leftWidtCurve;
     [SerializeField] private AnimationCurve rightWidtCurve;
 
+    [Range(2,100)][SerializeField] private int curveVertexes = 5;
+
+
     [Range(1, 200)][SerializeField] private float widthMultipliers;
 
     // Use this for initialization
     void Start () {
+        leftVisualNodeLineRenderer = this.gameObject.GetComponentsInChildren<LineRenderer>()[0];
+        rightVisualNodeLineRenderer = this.gameObject.GetComponentsInChildren<LineRenderer>()[1];
+        nodeNameText.text = myNode.getMessage();
+    }
+
+    void UpdateMessage ()
+    {
+        StringBuilder infoText = new StringBuilder();
+        if (!myNode.isQuestion())
+        {
+            infoText.Append("No children nodes I am a leaf node!");
+            infoText.AppendLine();
+        }
+        else
+        {
+            infoText.Append("I am a question node");
+            infoText.AppendLine();
+            var node = myNode.getYesNode();
+            if (node != null)
+            {
+                infoText.Append("My yes node is: " + node.getMessage());
+            }
+            else
+            {
+                infoText.Append("I do not have a yes node");
+            }
+            infoText.AppendLine();
+            node = myNode.getNoNode();
+            if(node != null)
+            {
+                infoText.Append("My no node is: " + node.getMessage());
+            }
+            else
+            {
+                infoText.Append("I do not have a no node");
+            }
+            infoText.AppendLine();
+            infoText.Append("I have been traversed " + myNode.traversedTimes + " times, crazy huh?");
+        }
     }
 	
 	// Update is called once per frame
@@ -34,25 +77,34 @@ public class VisualNode : MonoBehaviour {
         
         if(leftVisualNode != null)
         {
-            var vectorArray = new Vector3[2];
-            vectorArray[0] = transform.position;
-            vectorArray[1] = leftVisualNode.position;
-            leftVisualNodeLineRenderer.SetPositions(vectorArray);
+            leftVisualNodeLineRenderer.positionCount = this.curveVertexes;
+            leftVisualNodeLineRenderer.SetPositions((CalcLineVertexes(this.transform, leftVisualNode, this.curveVertexes)));
             //move these three to start later
             leftVisualNodeLineRenderer.colorGradient = leftColorGradient;
             leftVisualNodeLineRenderer.widthCurve = leftWidtCurve;
             leftVisualNodeLineRenderer.widthMultiplier = widthMultipliers;
         }
-        if(rightVisualNode)
+        if(rightVisualNode != null)
         {
-            var vectorArray = new Vector3[2];
-            vectorArray[0] = transform.position;
-            vectorArray[1] = rightVisualNode.position;
-            rightVisualNodeLineRenderer.SetPositions(vectorArray);
+            rightVisualNodeLineRenderer.positionCount = this.curveVertexes;
+            rightVisualNodeLineRenderer.SetPositions(CalcLineVertexes(this.transform, rightVisualNode, this.curveVertexes));
             //move these three to start later
             rightVisualNodeLineRenderer.colorGradient = rightColorGradient;
             rightVisualNodeLineRenderer.widthCurve = rightWidtCurve;
             rightVisualNodeLineRenderer.widthMultiplier = widthMultipliers;
         }
+    }
+
+    private Vector3[] CalcLineVertexes(Transform myself, Transform linePoint, int vertexDetail)
+    {
+        Vector3[] r = new Vector3[vertexDetail];
+        r[0] = myself.position;
+        var lineScaling = (linePoint.position - myself.position).normalized;
+        for(float i = 1; i < vertexDetail - 1; i++)
+        {
+            r[(int)i] = Vector3.Lerp(myself.position, linePoint.position, (i / vertexDetail));
+        }
+        r[vertexDetail - 1] = linePoint.position;
+        return r;
     }
 }
