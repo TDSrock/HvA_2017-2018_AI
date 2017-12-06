@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class TwentyQuestion : MonoBehaviour
 {
@@ -30,7 +32,13 @@ public class TwentyQuestion : MonoBehaviour
 
     public enum State { setupNewGameState, readyToStart, playing, addingNewQuestion, addingNewQuestionAnswer, addingNewQuestionObject, guessing }
 
+    public enum SetupStates { question, objectYes, objectNo }
+
     public State state = State.readyToStart;
+
+    public SetupStates setupStates = SetupStates.question;
+
+    public string userQuestion, userObjectYes, userObjectNo;
 
     public State _state
     {
@@ -46,6 +54,10 @@ public class TwentyQuestion : MonoBehaviour
                 case State.readyToStart:
                     this.inputFieldSection.SetActive(false);
                     this.buttonsSection.SetActive(true);
+                    this.questionCountText.text = "Welcome to 20Q!";
+                    _output = "Think up any object, person or animal. After such press Yes to start and I will start guessing at what you have in your mind! Press no to leave me :(";
+                    //whenver we get here we want to save the tree.
+                    tree.saveQuestionTree();
                     break;
                 case State.playing:
                     this.inputFieldSection.SetActive(false);
@@ -55,6 +67,7 @@ public class TwentyQuestion : MonoBehaviour
                     this.inputFieldSection.SetActive(true);
                     this.buttonsSection.SetActive(false);
                     this.questionCountText.text = "Looks like you won, could you help me get smarter?";
+                    this._output = "What where you thinking of?";
                     break;
                 case State.guessing:
                     this.inputFieldSection.SetActive(false);
@@ -88,7 +101,6 @@ public class TwentyQuestion : MonoBehaviour
     public Text outputText;
     public Text questionCountText;
     int questionsAsked;
-    string userQuestion;
     string userObject;
 
     public BTNode currentActiveNode;
@@ -118,7 +130,7 @@ public class TwentyQuestion : MonoBehaviour
         //There's no need to ask for the initial data when it already exists
         if(File.Exists(Application.persistentDataPath + "/serialized.bin"))
         {
-            tree = this.gameObject.AddComponent<BTTree>();
+            tree = new BTTree();
             tree.parent = this;
             this._output = "Tree loaded";
             this._state = State.readyToStart;
@@ -154,8 +166,9 @@ public class TwentyQuestion : MonoBehaviour
             return false;
     }
 
-    static void startNewGame()
+    void startNewGame()
     {
+        this._state = State.setupNewGameState;
         Debug.LogError("No previous knowledge found!\n" +
             "Initializing a new game.\n");
         Console.WriteLine("Enter a question about an object, person or animal: ");
@@ -193,14 +206,13 @@ public class TwentyQuestion : MonoBehaviour
         switch (_state)
         {
             case State.readyToStart:
-                _state = State.playing;
-                currentActiveNode = tree.rootNode;
-                questionsAsked = 1;
-                this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
-                this._output = currentActiveNode.query(questionsAsked);
+                Application.Quit();
                 break;
             case State.playing:
                 ChangeActiveNode(this.currentActiveNode.getNoNode());
+                questionsAsked++;
+                this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
+                this._output = currentActiveNode.query(questionsAsked);
                 break;
             case State.guessing:
                 _state = State.addingNewQuestion;
@@ -212,6 +224,34 @@ public class TwentyQuestion : MonoBehaviour
     public void confirmTextButtonPressed()
     {
         this._inputText = inputField.text;
+        inputField.text = "";
+        switch (_state)
+        {
+            case State.setupNewGameState:
+                switch (setupStates)
+                {
+                    case SetupStates.question:
+                        this.userQuestion = this._inputText;
+                        this.setupStates = SetupStates.objectYes;
+                        this._output = "What would a plausible object be if you answered yes for this question?";
+                        break;
+                    case SetupStates.objectYes:
+                        this.userObjectYes = this._inputText;
+                        this.setupStates = SetupStates.objectNo;
+                        this._output = "What would a plausible object be if you answered no for this question?";
+                        break;
+                    case SetupStates.objectNo:
+                        this.userObjectNo = this._inputText;
+                        this._state = State.readyToStart;
+                        break;
+                }
+                break;
+            case State.addingNewQuestion:
+                this._state = State.addingNewQuestionObject;
+                this.userObject = this._inputText;
+                break;
+                
+        }
     }
 
 
@@ -219,8 +259,35 @@ public class TwentyQuestion : MonoBehaviour
     {
         this.currentActiveNode = nodeToChangeToo;
         this.questionsAsked++;
-        this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
+        this.questionCountText.text = "This is question #: " + questionsAsked;
         this._output = currentActiveNode.query(questionsAsked);
+    }
+
+    IEnumerable SpawnTree(int maximumnodesToSpawn)
+    {
+        List<BTNode> discoveredNodes = new List<BTNode>();
+        discoveredNodes.Add(tree.rootNode);
+        while (true)
+        {
+            for(int i = 0; i < maximumnodesToSpawn; i++)
+            {
+                if (discoveredNodes.Count == 0)
+                    yield break;
+                BTNode current = discoveredNodes[i];
+                if(current.getYesNode() != null)
+                {
+                    discoveredNodes.Add(current.getYesNode());
+                }
+                if (current.getNoNode() != null)
+                {
+                    discoveredNodes.Add(current.getNoNode());
+                }
+
+                current.visualNode = Instantiate(nodePrefab);
+
+            }
+            yield return new WaitForFixedUpdate();
+        }
     }
 
 }

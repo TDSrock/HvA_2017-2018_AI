@@ -8,13 +8,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 [Serializable]
-public class BTTree : MonoBehaviour
+public class BTTree
 {
     bool constructorUsed = false;
     [SerializeField]public BTNode rootNode;
+    [NonSerialized] public string filePath;
     public TwentyQuestion parent;
     public BTTree(string question, string yesGuess, string noGuess)
     {
+        filePath = Application.persistentDataPath;
         rootNode = new BTNode(question, 0, 0);
         rootNode.setYesNode(new BTNode(yesGuess, 0, 0));
         rootNode.setNoNode(new BTNode(noGuess, 0, 0));
@@ -25,31 +27,19 @@ public class BTTree : MonoBehaviour
 
     public BTTree()
     {
+        filePath = Application.persistentDataPath;
+        /*IFormatter formatter = new BinaryFormatter();
+        using (FileStream stream = File.OpenRead(filePath + "/serialized.bin"))
+        {
+            rootNode = (BTNode)formatter.Deserialize(stream);
+        }*/
 
-    }
-
-    public void Start()
-    {
-            IFormatter formatter = new BinaryFormatter();
-            using(FileStream stream = File.OpenRead(Application.persistentDataPath + "/serialized.bin"))
-            {
-                //rootNode = (BTNode)formatter.Deserialize(stream);
-            }
-
-    }
-
-    public void query()
-    {
-        rootNode.query(1);
-
-        //We're at the end of the game now, so we'll save the tree in case the user added new data
-        //this.saveQuestionTree();
     }
 
     public void saveQuestionTree()
     {
         IFormatter formatter = new BinaryFormatter();
-        using(FileStream stream = File.Create(Application.persistentDataPath + "/serialized.bin"))
+        using(FileStream stream = File.Create(filePath + "/serialized.bin"))
         {
             formatter.Serialize(stream, rootNode);
         }

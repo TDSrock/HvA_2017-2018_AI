@@ -7,13 +7,13 @@ using UnityEngine;
 [Serializable]
 public class BTNode
 {
-    string message;
+    public string message;
     BTNode noNode;
     BTNode yesNode;
-    BTTree parent;
+    [NonSerialized] BTTree parent;
     public int traversedTimes;
     public int winsOnThisNode;
-    [NonSerialized] public VisualNode visualNode;//ref too the visual node script
+    [NonSerialized] public GameObject visualNode;//ref too the visual node script
 
     /**
      * Constructor for the nodes: This class holds an String representing 
@@ -34,6 +34,7 @@ public class BTNode
         traversedTimes++;
         if (q > 20)
         {
+            TwentyQuestion.instance.state = TwentyQuestion.State.readyToStart;
             return "That was the last question. You win!";
         }
         else if (this.isQuestion())

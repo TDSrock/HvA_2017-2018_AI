@@ -10,24 +10,36 @@ public class VisualNode : MonoBehaviour {
     private Text nodeNameText;
     [SerializeField]
     private Text nodeInfoText;
-    public BTNode myNode;
+    [SerializeField]
+    private BTNode myNode;
 
-    public Transform leftVisualNode;
-    public Transform rightVisualNode;
+    public BTNode _myNode
+    {
+        get { return this.myNode; }
+        set
+        {
+            this.myNode = value;
+            if(value != null)
+                this.UpdateMessage();
+        }
+    }
+
+    [HideInInspector] public Transform leftVisualNode;
+    [HideInInspector] public Transform rightVisualNode;
 
     private LineRenderer leftVisualNodeLineRenderer;
     private LineRenderer rightVisualNodeLineRenderer;
-
+    [Header("Color gradients")]
     [SerializeField] private Gradient leftColorGradient;
     [SerializeField] private Gradient rightColorGradient;
-
+    [Header("Width curves")]
     [SerializeField] private AnimationCurve leftWidtCurve;
     [SerializeField] private AnimationCurve rightWidtCurve;
+    [Header("Width detail")]
+    [Range(2,100)]public int curveVertexes = 50;
 
-    [Range(2,100)][SerializeField] private int curveVertexes = 5;
-
-
-    [Range(1, 200)][SerializeField] private float widthMultipliers;
+    [Header("Width multiplier(affects every vertex)")]
+    [Range(1, 200)]public float widthMultipliers;
 
     // Use this for initialization
     void Start () {
