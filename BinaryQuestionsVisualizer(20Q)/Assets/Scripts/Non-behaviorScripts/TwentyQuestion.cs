@@ -50,6 +50,8 @@ public class TwentyQuestion : MonoBehaviour
                 case State.setupNewGameState:
                     this.inputFieldSection.SetActive(true);
                     this.buttonsSection.SetActive(false);
+                    questionCountText.text = "No data found lets setup the start of the game!";
+                    _setupStates = SetupStates.question;
                     break;
                 case State.readyToStart:
                     this.inputFieldSection.SetActive(false);
@@ -86,6 +88,22 @@ public class TwentyQuestion : MonoBehaviour
                 default:
                     Debug.LogWarning("Problems have arised");
                     break;
+            }
+        }
+    }
+
+    public SetupStates _setupStates
+    {
+        get { return this.setupStates; }
+        set
+        {
+            this.setupStates = value;
+            switch (value)
+            {
+                case SetupStates.question:
+                    _output = "Enter a question about an object, person or animal: ";
+                    break;
+
             }
         }
     }
