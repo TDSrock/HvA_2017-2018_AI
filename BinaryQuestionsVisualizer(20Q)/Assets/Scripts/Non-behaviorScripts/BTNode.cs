@@ -113,6 +113,7 @@ public class BTNode
 
     public string getMessage()
     {
+        Debug.Log(message);
         return message;
     }
 

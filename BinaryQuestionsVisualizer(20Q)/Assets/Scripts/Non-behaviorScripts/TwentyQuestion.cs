@@ -19,7 +19,7 @@ public class TwentyQuestion : MonoBehaviour
 
     void Awake()
     {
-        if (instance != null)
+        if(instance != null)
         {
             Debug.LogWarning("More than one instance of Inventory found!");
             return;
@@ -43,51 +43,52 @@ public class TwentyQuestion : MonoBehaviour
     public State _state
     {
         get { return this.state; }
-        set {
+        set
+        {
             this.state = value;
-            switch (value)
+            switch(value)
             {
                 case State.setupNewGameState:
-                    this.inputFieldSection.SetActive(true);
-                    this.buttonsSection.SetActive(false);
-                    questionCountText.text = "No data found lets setup the start of the game!";
-                    _setupStates = SetupStates.question;
-                    break;
+                this.inputFieldSection.SetActive(true);
+                this.buttonsSection.SetActive(false);
+                questionCountText.text = "No data found lets setup the start of the game!";
+                _setupStates = SetupStates.question;
+                break;
                 case State.readyToStart:
-                    this.inputFieldSection.SetActive(false);
-                    this.buttonsSection.SetActive(true);
-                    this.questionCountText.text = "Welcome to 20Q!";
-                    _output = "Think up any object, person or animal. After such press Yes to start and I will start guessing at what you have in your mind! Press no to leave me :(";
-                    //whenver we get here we want to save the tree.
-                    tree.saveQuestionTree();
-                    break;
+                this.inputFieldSection.SetActive(false);
+                this.buttonsSection.SetActive(true);
+                this.questionCountText.text = "Welcome to 20Q!";
+                _output = "Think up any object, person or animal. After such press Yes to start and I will start guessing at what you have in your mind! Press no to leave me :(";
+                //whenver we get here we want to save the tree.
+                tree.saveQuestionTree();
+                break;
                 case State.playing:
-                    this.inputFieldSection.SetActive(false);
-                    this.buttonsSection.SetActive(true);
-                    break;
+                this.inputFieldSection.SetActive(false);
+                this.buttonsSection.SetActive(true);
+                break;
                 case State.addingNewQuestion:
-                    this.inputFieldSection.SetActive(true);
-                    this.buttonsSection.SetActive(false);
-                    this.questionCountText.text = "Looks like you won, could you help me get smarter?";
-                    this._output = "What where you thinking of?";
-                    break;
+                this.inputFieldSection.SetActive(true);
+                this.buttonsSection.SetActive(false);
+                this.questionCountText.text = "Looks like you won, could you help me get smarter?";
+                this._output = "What where you thinking of?";
+                break;
                 case State.guessing:
-                    this.inputFieldSection.SetActive(false);
-                    this.buttonsSection.SetActive(true);
-                    this.questionCountText.text = "Hmmm I sense you are thinking about:";
-                    break;
+                this.inputFieldSection.SetActive(false);
+                this.buttonsSection.SetActive(true);
+                this.questionCountText.text = "Hmmm I sense you are thinking about:";
+                break;
                 case State.addingNewQuestionAnswer:
-                    this.inputFieldSection.SetActive(false);
-                    this.buttonsSection.SetActive(true);
-                    this.questionCountText.text = "";
-                    break;
+                this.inputFieldSection.SetActive(false);
+                this.buttonsSection.SetActive(true);
+                this.questionCountText.text = "";
+                break;
                 case State.addingNewQuestionObject:
-                    this.inputFieldSection.SetActive(true);
-                    this.buttonsSection.SetActive(false);
-                    break;
+                this.inputFieldSection.SetActive(true);
+                this.buttonsSection.SetActive(false);
+                break;
                 default:
-                    Debug.LogWarning("Problems have arised");
-                    break;
+                Debug.LogWarning("Problems have arised");
+                break;
             }
         }
     }
@@ -98,18 +99,19 @@ public class TwentyQuestion : MonoBehaviour
         set
         {
             this.setupStates = value;
-            switch (value)
+            switch(value)
             {
                 case SetupStates.question:
-                    _output = "Enter a question about an object, person or animal: ";
-                    break;
+                _output = "Enter a question about an object, person or animal: ";
+                break;
 
             }
         }
     }
 
     static BTTree tree;
-    [SerializeField]private string output;
+    [SerializeField]
+    private string output;
     [SerializeField]
     private InputField inputField;
     [SerializeField]
@@ -158,12 +160,20 @@ public class TwentyQuestion : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(SpawnTree(1));
+        }
+    }
+
     private void FixedUpdate()
     {
-        switch (_state)
+        switch(_state)
         {
             case State.playing:
-                break;
+            break;
         }
     }
 
@@ -189,52 +199,44 @@ public class TwentyQuestion : MonoBehaviour
         this._state = State.setupNewGameState;
         Debug.LogError("No previous knowledge found!\n" +
             "Initializing a new game.\n");
-        Console.WriteLine("Enter a question about an object, person or animal: ");
-        string question = Console.ReadLine();
-        Console.Write("Enter a possible guess (an object, person or animal) if the response to this question is Yes: ");
-        string yesGuess = Console.ReadLine();
-        Console.Write("Enter a possible guess (an object, person or animal) if the response to this question is No: ");
-        string noGuess = Console.ReadLine();
-
-        tree = new BTTree(question, yesGuess, noGuess);
     }
 
     public void yesButtonPressed()
     {
-        switch (_state)
+        switch(_state)
         {
             case State.readyToStart:
-                _state = State.playing;
-                currentActiveNode = tree.rootNode;
-                this.questionsAsked = 0;
-                break;
+            _state = State.playing;
+            currentActiveNode = tree.rootNode;
+            this.questionsAsked = 0;
+            break;
             case State.playing:
-                ChangeActiveNode(this.currentActiveNode.getYesNode());
-                break;
+            ChangeActiveNode(this.currentActiveNode.getYesNode());
+            break;
             case State.guessing:
-                _output = "Haha! I win!!!";
-                _state = State.readyToStart;
-                break;
+            _output = "Haha! I win!!!";
+            _state = State.readyToStart;
+            break;
 
         }
     }
 
     public void noButtonPressed()
     {
-        switch (_state)
+        switch(_state)
         {
             case State.readyToStart:
-                Application.Quit();
-                break;
+            Application.Quit();
+            break;
             case State.playing:
-                ChangeActiveNode(this.currentActiveNode.getNoNode());
-                questionsAsked++;
-                this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
-                this._output = currentActiveNode.query(questionsAsked);
-                break;
+            ChangeActiveNode(this.currentActiveNode.getNoNode());
+            questionsAsked++;
+            this.questionCountText.text = "I have but only asked " + questionsAsked + " questions";
+            this._output = currentActiveNode.query(questionsAsked);
+            break;
             case State.guessing:
-                _state = State.addingNewQuestion;
-                    break;
+            _state = State.addingNewQuestion;
+            break;
 
         }
     }
@@ -243,32 +245,34 @@ public class TwentyQuestion : MonoBehaviour
     {
         this._inputText = inputField.text;
         inputField.text = "";
-        switch (_state)
+        switch(_state)
         {
             case State.setupNewGameState:
-                switch (setupStates)
-                {
-                    case SetupStates.question:
-                        this.userQuestion = this._inputText;
-                        this.setupStates = SetupStates.objectYes;
-                        this._output = "What would a plausible object be if you answered yes for this question?";
-                        break;
-                    case SetupStates.objectYes:
-                        this.userObjectYes = this._inputText;
-                        this.setupStates = SetupStates.objectNo;
-                        this._output = "What would a plausible object be if you answered no for this question?";
-                        break;
-                    case SetupStates.objectNo:
-                        this.userObjectNo = this._inputText;
-                        this._state = State.readyToStart;
-                        break;
-                }
+            switch(setupStates)
+            {
+                case SetupStates.question:
+                this.userQuestion = this._inputText;
+                this.setupStates = SetupStates.objectYes;
+                this.questionCountText.text = this.userQuestion;
+                this._output = "What would a plausible object be if you answered yes for this question?";
                 break;
+                case SetupStates.objectYes:
+                this.userObjectYes = this._inputText;
+                this.setupStates = SetupStates.objectNo;
+                this._output = "What would a plausible object be if you answered no for this question?";
+                break;
+                case SetupStates.objectNo:
+                this.userObjectNo = this._inputText;
+                tree = new BTTree(this.userQuestion, this.userObjectYes, this.userObjectNo);
+                this._state = State.readyToStart;
+                break;
+            }
+            break;
             case State.addingNewQuestion:
-                this._state = State.addingNewQuestionObject;
-                this.userObject = this._inputText;
-                break;
-                
+            this._state = State.addingNewQuestionObject;
+            this.userObject = this._inputText;
+            break;
+
         }
     }
 
@@ -281,31 +285,68 @@ public class TwentyQuestion : MonoBehaviour
         this._output = currentActiveNode.query(questionsAsked);
     }
 
-    IEnumerable SpawnTree(int maximumnodesToSpawn)
+    IEnumerator SpawnTree(int maximumNodesToSpawn)
     {
         List<BTNode> discoveredNodes = new List<BTNode>();
         discoveredNodes.Add(tree.rootNode);
-        while (true)
+        tree.rootNode.visualNode = Instantiate(nodePrefab);
+        tree.rootNode.visualNode.GetComponent<VisualNode>()._myNode = tree.rootNode;
+        while(true)
         {
-            for(int i = 0; i < maximumnodesToSpawn; i++)
+            for(int i = 0; i < maximumNodesToSpawn; i++)
             {
-                if (discoveredNodes.Count == 0)
+                if(discoveredNodes.Count == 0)
+                {
+                    Debug.Log("Coroutine has ended;");
                     yield break;
-                BTNode current = discoveredNodes[i];
-                if(current.getYesNode() != null)
-                {
-                    discoveredNodes.Add(current.getYesNode());
                 }
-                if (current.getNoNode() != null)
+                BTNode current = discoveredNodes[0];
+                var instantiateFor = current.getYesNode();
+                if(instantiateFor != null)
                 {
-                    discoveredNodes.Add(current.getNoNode());
+                    discoveredNodes.Add(instantiateFor);
+                    InstantiateNode(current.visualNode, instantiateFor, true);
                 }
 
-                current.visualNode = Instantiate(nodePrefab);
+                instantiateFor = current.getNoNode();
+                if(instantiateFor != null)
+                {
+                    discoveredNodes.Add(instantiateFor);
+                    InstantiateNode(current.visualNode, instantiateFor, false);
+                }
+                discoveredNodes.Remove(current);
 
             }
+            Debug.Log("Waiting for next update");
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    private void InstantiateNode(GameObject parentNode, BTNode childNode, bool left)
+    {
+        var newNode = Instantiate(nodePrefab);
+        Debug.Log(parentNode);
+        var parentVisualNodeScript = parentNode.GetComponent<VisualNode>();
+        var newNodeVisualNodeScript = newNode.GetComponent<VisualNode>();
+        newNodeVisualNodeScript._myNode = childNode;
+        int direction = left ? -1 : 1;
+        if(left) {
+            parentVisualNodeScript.leftVisualNode = newNode.transform;
+        }
+        else
+        {
+            parentVisualNodeScript.rightVisualNode = newNode.transform;
+        }
+        
+        newNode.transform.localScale = parentVisualNodeScript.transform.localScale / 2;
+        newNode.transform.position = parentVisualNodeScript.transform.position + parentVisualNodeScript.distanceFromParent / 2 * direction 
+            - parentVisualNodeScript.transform.localScale * direction;
+        newNodeVisualNodeScript.widthMultipliers = parentVisualNodeScript.widthMultipliers / 2;
+        if(direction == -1)
+        {
+            newNode.transform.position = new Vector3(newNode.transform.position.x, newNode.transform.position.y * direction, newNode.transform.position.z);
+        }
+        
     }
 
 }

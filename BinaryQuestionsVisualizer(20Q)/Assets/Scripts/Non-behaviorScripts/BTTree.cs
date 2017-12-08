@@ -28,11 +28,11 @@ public class BTTree
     public BTTree()
     {
         filePath = Application.persistentDataPath;
-        /*IFormatter formatter = new BinaryFormatter();
+        IFormatter formatter = new BinaryFormatter();
         using (FileStream stream = File.OpenRead(filePath + "/serialized.bin"))
         {
             rootNode = (BTNode)formatter.Deserialize(stream);
-        }*/
+        }
 
     }
 

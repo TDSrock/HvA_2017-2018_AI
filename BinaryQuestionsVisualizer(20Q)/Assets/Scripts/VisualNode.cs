@@ -23,9 +23,11 @@ public class VisualNode : MonoBehaviour {
                 this.UpdateMessage();
         }
     }
-
-    [HideInInspector] public Transform leftVisualNode;
-    [HideInInspector] public Transform rightVisualNode;
+    public Vector3 distanceFromParent = new Vector3(10, -10, 0);
+    [Header("Binding Line Data")]
+    /*[HideInInspector]*/
+    public Transform leftVisualNode;
+    /*[HideInInspector]*/ public Transform rightVisualNode;
 
     private LineRenderer leftVisualNodeLineRenderer;
     private LineRenderer rightVisualNodeLineRenderer;
@@ -39,17 +41,17 @@ public class VisualNode : MonoBehaviour {
     [Range(2,100)]public int curveVertexes = 50;
 
     [Header("Width multiplier(affects every vertex)")]
-    [Range(1, 200)]public float widthMultipliers;
+    [Range(1, 500)]public float widthMultipliers;
 
     // Use this for initialization
     void Start () {
         leftVisualNodeLineRenderer = this.gameObject.GetComponentsInChildren<LineRenderer>()[0];
         rightVisualNodeLineRenderer = this.gameObject.GetComponentsInChildren<LineRenderer>()[1];
-        nodeNameText.text = myNode.getMessage();
     }
 
     void UpdateMessage ()
     {
+        nodeNameText.text = myNode.getMessage();
         StringBuilder infoText = new StringBuilder();
         if (!myNode.isQuestion())
         {
@@ -80,8 +82,13 @@ public class VisualNode : MonoBehaviour {
                 infoText.Append("I do not have a no node");
             }
             infoText.AppendLine();
-            infoText.Append("I have been traversed " + myNode.traversedTimes + " times, crazy huh?");
         }
+        infoText.Append("I have been traversed " + myNode.traversedTimes + " times, crazy huh?");
+        if(!_myNode.isQuestion())
+        {
+            infoText.Append("I have won on this " + _myNode.winsOnThisNode + " times");
+        }
+        nodeInfoText.text = infoText.ToString();
     }
 	
 	// Update is called once per frame
