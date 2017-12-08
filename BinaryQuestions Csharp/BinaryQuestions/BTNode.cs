@@ -99,6 +99,7 @@ namespace BinaryQuestions
                 inputCharacter = Char.ToLower(inputCharacter);
             }
             return inputCharacter;
+
         }
 
         // tree traversal methods
@@ -135,6 +136,24 @@ namespace BinaryQuestions
             }
             Console.Write(node.getMessage() + " ");
         }
+
+        //Calculate the value of a given node
+        public int calculateEndNodeValue() //returns 0 for question nodes
+        {
+            int value = 0;
+            if (!isQuestion()) // check if the node is a leafnode
+            {
+                for (int i = 0; i < message.Length; i++)
+                {
+                    if (char.IsLetter(message[i]))
+                    {
+                        value++;
+                    }
+                }
+            }
+            return value;
+        }
+        
 
         //Mutator Methods
         public void setMessage(string nodeMessage)
