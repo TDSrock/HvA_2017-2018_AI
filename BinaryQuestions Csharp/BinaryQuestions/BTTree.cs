@@ -47,5 +47,20 @@ namespace BinaryQuestions
                 formatter.Serialize(stream, rootNode);
             }
         }
+
+
+        //Traversal order printers
+        public void preOrder()
+        {
+            rootNode.preOrder(rootNode);
+        }
+        public void inOrder()
+        {
+            rootNode.inOrder(rootNode);
+        }
+        public void postOrder()
+        {
+            rootNode.postOrder(rootNode);
+        }
     }
 }

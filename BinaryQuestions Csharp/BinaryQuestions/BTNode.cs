@@ -101,6 +101,41 @@ namespace BinaryQuestions
             return inputCharacter;
         }
 
+        // tree traversal methods
+        public void preOrder(BTNode node) //Write root, left(yes), right(no)
+        {
+            Console.Write(node.getMessage() + " ");
+
+            if (node.isQuestion())
+            {
+                preOrder(node.yesNode);
+                preOrder(node.noNode);
+            }
+        }
+
+        public void inOrder(BTNode node) //Write left(yes), root, right(no)
+        {
+            if (node.isQuestion())
+            {
+                inOrder(node.yesNode);
+            }
+            Console.Write(node.getMessage() + " ");
+            if (node.isQuestion())
+            {
+                inOrder(node.noNode);
+            }
+        }
+
+        public void postOrder(BTNode node) //Write left(yes), right(no), root
+        {
+            if (node.isQuestion())
+            {
+                preOrder(node.yesNode);
+                preOrder(node.noNode);
+            }
+            Console.Write(node.getMessage() + " ");
+        }
+
         //Mutator Methods
         public void setMessage(string nodeMessage)
         {
