@@ -154,6 +154,61 @@ namespace BinaryQuestions
             return value;
         }
         
+        public int minMax(bool isMaxCycle)
+        {
+            int value = 0;
+            int yesValue;
+            int noValue;
+
+
+            if (yesNode.isQuestion())
+            {
+                yesValue = yesNode.minMax(!isMaxCycle); //if the node has children run another minmax cycle
+            }
+            else
+            {
+                yesValue = yesNode.calculateEndNodeValue();
+            }
+
+            if (noNode.isQuestion())
+            {
+                noValue = noNode.minMax(!isMaxCycle); //if the node has children run another minmax cycle
+            }
+            else
+            {
+                noValue = noNode.calculateEndNodeValue();
+            }
+
+            if (isMaxCycle) // if the player tries to max
+            {
+                if(yesValue > noValue) //set the value to the highest value
+                {
+                    value = yesValue; 
+                }
+                else
+                {
+                    value = noValue;
+                }
+            }
+            else // if the player tries to min 
+            {
+                if (yesValue < noValue) // set the value to the lowest value    
+                {
+                    value = yesValue;
+                }
+                else
+                {
+                    value = noValue;
+                }
+            }
+            
+            return value;
+        }
+
+        public void evaluate()
+        {
+            Console.WriteLine("the optimal value is: " + minMax(true));
+        }
 
         //Mutator Methods
         public void setMessage(string nodeMessage)

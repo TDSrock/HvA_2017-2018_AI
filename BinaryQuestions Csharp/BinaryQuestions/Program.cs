@@ -52,10 +52,10 @@ namespace BinaryQuestions
         static void preMenu()
         {
             Console.WriteLine("Play the game or get the traversal orders?");
-            Console.Write("Enter 'p' to play or 't' for the traversal orders: "); //let the player play the game or print the traversal order
+            Console.Write("Enter 'p' to play, 't' for the traversal orders or 'e' to evaluate: "); //let the player play the game or print the traversal order
             char inputCharacter = Console.ReadLine().ElementAt(0);
             inputCharacter = Char.ToLower(inputCharacter);
-            while (inputCharacter != 'p' && inputCharacter != 't') //ensuring correct input
+            while (inputCharacter != 'p' && inputCharacter != 't' && inputCharacter != 'e') //ensuring correct input
             {
                 Console.WriteLine("Incorrect input please enter again: ");
                 inputCharacter = Console.ReadLine().ElementAt(0);
@@ -66,8 +66,13 @@ namespace BinaryQuestions
             {
                 return;
             }
+            if (inputCharacter == 't')
+            {
+                traversal(); //If the player picked play, start traversal
+            }
 
-            traversal(); //If the player didn't pick play, start traversal
+            tree.evaluateTree(); // if the player picked evaluate do that then restart the menu
+            preMenu();
         }
 
         static void traversal()
