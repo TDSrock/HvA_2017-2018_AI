@@ -62,5 +62,11 @@ namespace BinaryQuestions
         {
             rootNode.postOrder(rootNode);
         }
+
+        //minmax printer
+        public void evaluateTree()
+        {
+            rootNode.evaluate();
+        }
     }
 }
