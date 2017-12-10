@@ -51,58 +51,14 @@ public class BTNode
     {
         TwentyQuestion.instance._state = TwentyQuestion.State.guessing;
         return "Are you thinking of a(n) " + this.message + "?";
-        var input = ' ';
-        if(input == 'y')
-            Console.Write("I Win!\n");
-        else
-            updateTree();
-    }
-
-    private void updateTree()
-    {
-        Console.Write("You win! What were you thinking of? ");
-        string userObject = Console.ReadLine();
-        Console.Write("Please enter a question to distinguish a(n) "
-            + this.message + " from " + userObject + ": ");
-        string userQuestion = Console.ReadLine();
-        Console.Write("If you were thinking of a(n) " + userObject
-            + ", what would the answer to that question be (\'yes\' or \'no\')? ");
-        char input = getYesOrNo(); //y or n
-        if(input == 'y')
-        {
-            this.noNode = new BTNode(this.message, this.traversedTimes, this.winsOnThisNode);
-            this.yesNode = new BTNode(userObject, 0 , 0);
-        }
-        else
-        {
-            this.noNode = new BTNode(this.message, this.traversedTimes, this.winsOnThisNode);
-            this.yesNode = new BTNode(userObject, 0, 0);
-        }
-        Console.Write("Thank you! My knowledge has been increased");
-        this.setMessage(userQuestion);
     }
 
     public bool isQuestion()
     {
-        if(noNode == null && yesNode == null)
+        if (noNode == null && yesNode == null)
             return false;
         else
             return true;
-    }
-
-    /**
-     * Asks a user for yes or no and keeps prompting them until the key
-     * Y,y,N,or n is entered
-     */
-    private char getYesOrNo()
-    {
-        char inputCharacter = ' ';
-        /*while(inputCharacter != 'y' && inputCharacter != 'n')
-        {
-            inputCharacter = Console.ReadLine().ElementAt(0);
-            inputCharacter = Char.ToLower(inputCharacter);
-        }*/
-        return inputCharacter;
     }
 
     //Mutator Methods
@@ -113,7 +69,6 @@ public class BTNode
 
     public string getMessage()
     {
-        Debug.Log(message);
         return message;
     }
 
@@ -135,5 +90,11 @@ public class BTNode
     public BTNode getYesNode()
     {
         return yesNode;
+    }
+
+    public void ResetTrackingVars()
+    {
+        traversedTimes = 0;
+        winsOnThisNode = 0;
     }
 }
