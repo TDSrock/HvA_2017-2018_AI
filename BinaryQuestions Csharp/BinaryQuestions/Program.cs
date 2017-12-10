@@ -62,45 +62,42 @@ namespace BinaryQuestions
                 inputCharacter = Console.ReadLine().ElementAt(0);
                 inputCharacter = Char.ToLower(inputCharacter);
             }
-            
-            if (inputCharacter == 'p') //if player wants to play the game then return back to the main game
+            switch (inputCharacter)
             {
-                return;
+                case 'p'://if player wants to play the game then return back to the main game
+                    return;
+                case 't':
+                    traversal(); //If the player picked play, start traversal
+                    break;
+                case 'e':
+                    Console.WriteLine("MinMax:");
+                    tree.evaluateTree(false, true); // if the player picked evaluate do that then restart the menu
+                    Console.WriteLine("alphaBetaPruning:");
+                    tree.evaluateTree(true, true);
+                    Console.WriteLine();
+                    break;
+                case 's':
+                    Stopwatch time = new Stopwatch();
+                    var test = 5000;
+                    time.Start();
+                    for (int i = 0; i < test; i++)
+                    {
+                        tree.evaluateTree(false, false);
+                    }
+                    time.Stop();
+                    var firstTest = ("Time taken to eval tree " + test + " times via minimax " + time.ElapsedTicks + " ticks");
+                    time.Restart();
+                    for (int i = 0; i < test; i++)
+                    {
+                        tree.evaluateTree(true, false);
+                    }
+                    time.Stop();
+                    Console.WriteLine(firstTest);
+                    Console.WriteLine("Time taken to eval tree " + test + " times via minimax with alpha beta pruning " + time.ElapsedTicks + " ticks");
+                    Console.WriteLine();
+                    break;
             }
-            else if (inputCharacter == 't')
-            {
-                traversal(); //If the player picked play, start traversal
-            }
-            else if (inputCharacter == 'e')
-            {
 
-                Console.WriteLine("MinMax:");
-                tree.evaluateTree(false, true); // if the player picked evaluate do that then restart the menu
-                Console.WriteLine("alphaBetaPruning:");
-                tree.evaluateTree(true, true);
-                Console.WriteLine();
-            }
-            else if(inputCharacter == 's')
-            {
-                Stopwatch time = new Stopwatch();
-                var test = 5000;
-                time.Start();
-                for (int i = 0; i < test; i++)
-                {
-                    tree.evaluateTree(false, false);
-                }
-                time.Stop();
-                var firstTest = ("Time taken to eval tree " + test + " times via minimax " + time.ElapsedTicks + " ticks");
-                time.Restart();
-                for (int i = 0; i < test; i++)
-                {
-                    tree.evaluateTree(true, false);
-                }
-                time.Stop();
-                Console.WriteLine(firstTest);
-                Console.WriteLine("Time taken to eval tree " + test + " times via minimax with alpha beta pruning " + time.ElapsedTicks + " ticks");
-                Console.WriteLine();
-            }
             preMenu();
         }
 

@@ -230,8 +230,6 @@ namespace BinaryQuestions
                 }
                 
             }
-                               
-             
         }
 
         //Mutator Methods
