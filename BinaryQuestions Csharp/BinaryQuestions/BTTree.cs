@@ -64,9 +64,9 @@ namespace BinaryQuestions
         }
 
         //minmax printer
-        public void evaluateTree()
+        public void evaluateTree(bool alphaBetaPruning, bool print)
         {
-            rootNode.evaluate();
+            rootNode.evaluate(alphaBetaPruning, print);
         }
     }
 }

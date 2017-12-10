@@ -205,9 +205,33 @@ namespace BinaryQuestions
             return value;
         }
 
-        public void evaluate()
+        public void evaluate(bool alphaBetaPruning, bool print, int depth = -1)
         {
-            Console.WriteLine("the optimal value is: " + minMax(true));
+            if (!alphaBetaPruning)
+            {
+                if (print)
+                {
+                    Console.WriteLine("the optimal value is: " + minMax(true));
+                }
+                else
+                {
+                    minMax(true);
+                }
+            }
+            else
+            {
+                if (print)
+                {
+                    Console.WriteLine("the optimal value is: " + Algorithms.MiniMaxAlphaBetaPruning(this, depth));
+                }
+                else
+                {
+                    Algorithms.MiniMaxAlphaBetaPruning(this, depth);
+                }
+                
+            }
+                               
+             
         }
 
         //Mutator Methods
@@ -223,6 +247,7 @@ namespace BinaryQuestions
 
         public void setNoNode(BTNode node)
         {
+
             noNode = node;
         }
 
@@ -239,6 +264,16 @@ namespace BinaryQuestions
         public BTNode getYesNode()
         {
             return yesNode;
+        }
+
+        public List<BTNode> GetChildren()
+        {
+            List<BTNode> children = new List<BTNode>();
+            if (yesNode != null)
+                children.Add(yesNode);
+            if (noNode != null)
+                children.Add(noNode);
+            return children;
         }
     }
 }
