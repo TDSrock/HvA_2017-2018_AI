@@ -250,7 +250,7 @@
     <Compile Include="Assets\Scripts\Non-behaviorScripts\BTNode.cs" />
     <Compile Include="Assets\Scripts\Non-behaviorScripts\BTTree.cs" />
     <Compile Include="Assets\Scripts\Non-behaviorScripts\TwentyQuestion.cs" />
-    <Compile Include="Assets\VisualNode.cs" />
+    <Compile Include="Assets\Scripts\VisualNode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

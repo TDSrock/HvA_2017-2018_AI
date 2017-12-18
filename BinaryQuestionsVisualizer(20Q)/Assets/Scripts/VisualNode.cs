@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System.Text;
 
 public class VisualNode : MonoBehaviour {
-
     [SerializeField]
     private Text nodeNameText;
     [SerializeField]
@@ -25,9 +24,10 @@ public class VisualNode : MonoBehaviour {
     }
     public Vector3 distanceFromParent = new Vector3(10, -10, 0);
     [Header("Binding Line Data")]
-    /*[HideInInspector]*/
+    [HideInInspector]
     public Transform leftVisualNode;
-    /*[HideInInspector]*/ public Transform rightVisualNode;
+    [HideInInspector]
+    public Transform rightVisualNode;
 
     private LineRenderer leftVisualNodeLineRenderer;
     private LineRenderer rightVisualNodeLineRenderer;
@@ -49,10 +49,11 @@ public class VisualNode : MonoBehaviour {
         rightVisualNodeLineRenderer = this.gameObject.GetComponentsInChildren<LineRenderer>()[1];
     }
 
+    //set the text fields of this instance
     void UpdateMessage ()
     {
         nodeNameText.text = myNode.getMessage();
-        StringBuilder infoText = new StringBuilder();
+        StringBuilder infoText = new StringBuilder();//useing a string builder, it's append funtion is O(1) instead of string concating which is O(n)
         if (!myNode.isQuestion())
         {
             infoText.Append("No children nodes I am a leaf node!");
@@ -93,7 +94,7 @@ public class VisualNode : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        
+        //render the left line
         if(leftVisualNode != null)
         {
             leftVisualNodeLineRenderer.positionCount = this.curveVertexes;
@@ -103,6 +104,7 @@ public class VisualNode : MonoBehaviour {
             leftVisualNodeLineRenderer.widthCurve = leftWidtCurve;
             leftVisualNodeLineRenderer.widthMultiplier = widthMultipliers;
         }
+        //render the right line
         if(rightVisualNode != null)
         {
             rightVisualNodeLineRenderer.positionCount = this.curveVertexes;
@@ -113,17 +115,19 @@ public class VisualNode : MonoBehaviour {
             rightVisualNodeLineRenderer.widthMultiplier = widthMultipliers;
         }
     }
-
+    
+    //calculate the vertex possitions
     private Vector3[] CalcLineVertexes(Transform myself, Transform linePoint, int vertexDetail)
     {
+        //TODO: Make this method throw an error of vertexDetail is lower then 2
         Vector3[] r = new Vector3[vertexDetail];
-        r[0] = myself.position;
+        r[0] = myself.position;//always start at self
         var lineScaling = (linePoint.position - myself.position).normalized;
         for(float i = 1; i < vertexDetail - 1; i++)
         {
             r[(int)i] = Vector3.Lerp(myself.position, linePoint.position, (i / vertexDetail));
         }
-        r[vertexDetail - 1] = linePoint.position;
+        r[vertexDetail - 1] = linePoint.position;//always end at the goal location
         return r;
     }
 }

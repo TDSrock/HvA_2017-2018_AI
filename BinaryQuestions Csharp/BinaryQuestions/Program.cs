@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 
 namespace BinaryQuestions
 {
@@ -52,26 +53,51 @@ namespace BinaryQuestions
         static void preMenu()
         {
             Console.WriteLine("Play the game or get the traversal orders?");
-            Console.Write("Enter 'p' to play, 't' for the traversal orders or 'e' to evaluate: "); //let the player play the game or print the traversal order
+            Console.Write("Enter 'p' to play, 't' for the traversal orders or 'e' to evaluate and lastly 's' for stopwatch time trails: "); //let the player play the game or print the traversal order
             char inputCharacter = Console.ReadLine().ElementAt(0);
             inputCharacter = Char.ToLower(inputCharacter);
-            while (inputCharacter != 'p' && inputCharacter != 't' && inputCharacter != 'e') //ensuring correct input
+            while (inputCharacter != 'p' && inputCharacter != 't' && inputCharacter != 'e' && inputCharacter != 's') //ensuring correct input
             {
                 Console.WriteLine("Incorrect input please enter again: ");
                 inputCharacter = Console.ReadLine().ElementAt(0);
                 inputCharacter = Char.ToLower(inputCharacter);
             }
-
-            if (inputCharacter == 'p') //if player wants to play the game then return back to the main game
+            switch (inputCharacter)
             {
-                return;
-            }
-            if (inputCharacter == 't')
-            {
-                traversal(); //If the player picked play, start traversal
+                case 'p'://if player wants to play the game then return back to the main game
+                    return;
+                case 't':
+                    traversal(); //If the player picked play, start traversal
+                    break;
+                case 'e':
+                    Console.WriteLine("MinMax:");
+                    tree.evaluateTree(false, true); // if the player picked evaluate do that then restart the menu
+                    Console.WriteLine("alphaBetaPruning:");
+                    tree.evaluateTree(true, true);
+                    Console.WriteLine();
+                    break;
+                case 's':
+                    Stopwatch time = new Stopwatch();
+                    var test = 5000;
+                    time.Start();
+                    for (int i = 0; i < test; i++)
+                    {
+                        tree.evaluateTree(false, false);
+                    }
+                    time.Stop();
+                    var firstTest = ("Time taken to eval tree " + test + " times via minimax " + time.ElapsedTicks + " ticks");
+                    time.Restart();
+                    for (int i = 0; i < test; i++)
+                    {
+                        tree.evaluateTree(true, false);
+                    }
+                    time.Stop();
+                    Console.WriteLine(firstTest);
+                    Console.WriteLine("Time taken to eval tree " + test + " times via minimax with alpha beta pruning " + time.ElapsedTicks + " ticks");
+                    Console.WriteLine();
+                    break;
             }
 
-            tree.evaluateTree(); // if the player picked evaluate do that then restart the menu
             preMenu();
         }
 
