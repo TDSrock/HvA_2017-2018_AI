@@ -11,7 +11,7 @@ namespace TilesOfMonkeyIsland.TileWorld
         /**
          * Infinity cost. No cost is higher than this.
          */
-        public static int INFINITY = 999999999;
+        public static int INFINITY = int.MaxValue;
         /**
          * The normal and diagonal costs for all walkable types.
          */
