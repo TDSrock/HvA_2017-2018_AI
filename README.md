@@ -1,37 +1,26 @@
-## Welcome to GitHub Pages
+The AI repo consist of 3 excersizes of which one has a visualization built in unity.
 
-You can use the [editor on GitHub](https://github.com/TDSrock/HvA_2017-2018_AI/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+# [](#header-1)The excersizes
+#### [](#header-4)The Flocking Dead	
+A zombie flocking program where we had to program flocking boids.
+This excersize from a programming standpoint was an absolute joke.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+![](https://i.imgur.com/4jVqz9c.png)
 
-### Markdown
+#### [](#header-4)Binary Questions
+An excersize in which we had to look into a binary tree code and finish it. This was done relativly simply.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+I also decided to create a visualization for the binart tree in unity. Which essentialy made me re-make the Console application within Unity. Due to some lazyness in implementation there are some details in there done hastly. But they work so it's good enough for me.
+There was a bug with text scaling that I couldn't resolve. I think it's due too the parent object of the text canvas suddenly scaling down causing certain letters and or words to dissapear from a text canvas item that is setto autoscale the text.
 
-```markdown
-Syntax highlighted code block
+![](https://i.imgur.com/KyrGt8I.png)
+![](https://i.imgur.com/y6YWu1I.png)
+![](https://i.imgur.com/eZkH9CD.png)
+![](https://i.imgur.com/rBmB1vK.png)
+Images of the visualization
 
-# Header 1
-## Header 2
-### Header 3
+#### [](#header-4)Tiles Of Monkey Island
+This is a pathfinding excersize that we are currently working on. Will update this section when the excersize has been completed.
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/TDSrock/HvA_2017-2018_AI/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+[back](./)
