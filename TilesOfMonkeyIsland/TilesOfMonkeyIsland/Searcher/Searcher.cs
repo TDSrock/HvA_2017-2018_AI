@@ -68,6 +68,9 @@ namespace TilesOfMonkeyIsland.Searcher
                         case "ff00ffff"://cyan
                             pixelType = eTileType.PATH;
                             break;
+                            default://any errors?
+                                Console.WriteLine("Can't read the color found on map " + filename + " at possiton " + i + "/" + i2 + " Instead found " + pixel.Name);
+                                break;
                     }
                     map[i,i2] = pixelType;
                 }
@@ -114,7 +117,7 @@ namespace TilesOfMonkeyIsland.Searcher
             AlgorithmResults bfsSearch = bfsAlgorithm.run();
 
             info.setBFSSearch(bfsSearch);
-            saveImage(filename + "_bfs", bfsAlgorithm.getMap());
+            saveImage(filename + "_bfs_Manhatten", bfsAlgorithm.getMap());
 
             return info;
         }

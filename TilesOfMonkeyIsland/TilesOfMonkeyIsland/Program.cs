@@ -10,7 +10,7 @@ namespace TilesOfMonkeyIsland
     {
         static void Main(string[] args)
         {
-            TilesOfMonkeyIsland.Searcher.Searcher.start(10);
+            TilesOfMonkeyIsland.Searcher.Searcher.start(11);
         }
     }
 }

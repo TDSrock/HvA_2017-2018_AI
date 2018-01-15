@@ -18,16 +18,7 @@ namespace TilesOfMonkeyIsland.Algorithm
             // Calculate the minimal distance walking horizontally / vertically and diagonally.
             float distanceX = Math.Abs(node.x - this.goalNode.x);
             float distanceY = Math.Abs(node.y - this.goalNode.y);
-            float distance;
-
-            if (distanceX >= distanceY)
-            {
-                distance = (distanceX - distanceY) + distanceY * 1.4f;
-            }
-            else
-            {
-                distance = (distanceY - distanceX) + distanceX * 1.4f;
-            }
+            float distance = distanceX + distanceY;
 
             // Return the heuristic.
             return distance;

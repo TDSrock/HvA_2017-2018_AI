@@ -12,3 +12,6 @@ C:\Users\sjors\Desktop\HvA\Jaar 2\AI\new_AI_repo\TilesOfMonkeyIsland\TilesOfMonk
 C:\Users\sjors\Desktop\HvA\Jaar 2\AI\new_AI_repo\TilesOfMonkeyIsland\TilesOfMonkeyIsland\bin\Debug\Pathfinding.exe
 C:\Users\sjors\Desktop\HvA\Jaar 2\AI\new_AI_repo\TilesOfMonkeyIsland\TilesOfMonkeyIsland\bin\Debug\Pathfinding.pdb
 C:\Users\sjors\Desktop\HvA\Jaar 2\AI\new_AI_repo\TilesOfMonkeyIsland\TilesOfMonkeyIsland\obj\Debug\TilesOfMonkeyIsland.csprojResolveAssemblyReference.cache
+C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\TilesOfMonkeyIsland\TilesOfMonkeyIsland\bin\Debug\Pathfinding.exe
+C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\TilesOfMonkeyIsland\TilesOfMonkeyIsland\bin\Debug\Pathfinding.pdb
+C:\Users\sjors\Desktop\HvA\Jaar 2\AI\AI_Repo\TilesOfMonkeyIsland\TilesOfMonkeyIsland\obj\Debug\TilesOfMonkeyIsland.csprojResolveAssemblyReference.cache

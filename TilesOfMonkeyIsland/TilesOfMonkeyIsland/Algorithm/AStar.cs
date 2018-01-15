@@ -22,18 +22,18 @@ namespace TilesOfMonkeyIsland.Algorithm
 
             if(distanceX >= distanceY)
             {
-                distance = (distanceX - distanceY) + distanceY * 1.4f;
+                distance = (distanceX - distanceY) + distanceY * 1.4f;//euclidian aproximation
             }
             else
             {
-                distance = (distanceY - distanceX) + distanceX * 1.4f;
+                distance = (distanceY - distanceX) + distanceX * 1.4f;//euclidian aproximation
             }
             // Get the cost.
             float cost = node.cost;
-            var fscore = distance * 12.75f + cost;//scale the distance up, we want to weigh it more
+            var hscore = distance * 10 + cost;//scale the distance up, to match the minimal cost of a node
             // Return the heuristic.
 
-            return fscore;
+            return hscore;
         }
     }
 }
